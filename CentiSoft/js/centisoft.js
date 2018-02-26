@@ -2,7 +2,6 @@ function clickMe() {
     alert("Hello World!")
 }
 
-
 function postNewDeveloper() {
     var myObj = { Id: 100, Name: "TestName", Email: "Test@mail.com", Tasks: null }
     var params = JSON.stringify(myObj);
@@ -11,16 +10,13 @@ function postNewDeveloper() {
     postReq.open("POST", "http://dm.sof60.dk:84/api/Developer", true);
     postReq.setRequestHeader('Content-type', 'application/json');
     postReq.send(params);
-}
-
-
-
+};
 
 $(document).ready(function () {
 
     $("#btnGetDevelopers").click(function () {
         $.get("http://dm.sof60.dk:84/api/Developer", function (data) { loadDeveloperTable(data) });
-    })
+    });
 
     $("#btnSubmit").click(function () {
         var email = $("#txtName").val();
@@ -29,23 +25,20 @@ $(document).ready(function () {
     });
 
     $("#btnCookie").click(function () {
-
-
         var name = $("#cookie").val();
 
         var date = new Date();
         date.setTime(date.getTime() + (1000 * 24 * 60 * 60 * 1000));
         var expires = "expires=" + date.toUTCString();
-        document.cookie = "myCookie" + "=" + name + ";" + expires + ";path=C:file:///C:/Users/Arne/Documents/UCN/4.semester/WebDev/CentriSoft/index.html";
+        document.cookie = "myCookie=" + name + ";" + expires + ";path=/";
 
-        var cookie = getCookie("myCookie");
-        $("#nameCookie").text(cookie);//getCookie("myCookie"));
-        alert(cookie);
+        var kage = document.cookie;
+        //var cookie = getCookie("myCookie");
+        //$("#nameCookie").text(cookie);//getCookie("myCookie"));
+        alert(kage);
 
     })
-})
-
-
+});
 
 function loadDeveloperTable(data) {
     var table = document.getElementById("developerTable")
@@ -100,4 +93,3 @@ function getDevelopers() {
     onReq.open("GET", "http://dm.sof60.dk:84/api/Developer");
     onReq.send();
 }
-
