@@ -1,0 +1,29 @@
+#logo-text {
+  color: #1caa98;
+}
+#panel1 {
+  padding: 2em;
+  line-height: 30px;
+  padding-left: 20px;
+  background-color: #4e7873;
+}
+#panel1 h4 {
+  text-align: center;
+}
+#panel2 {
+  padding: 2em;
+  line-height: 30px;
+  padding-left: 20px;
+  background-color: #43b3b3;
+}
+#panel2 h4 {
+  text-align: center;
+}
+#header {
+  background-image: url('../images/background-hourglass-2.jpg');
+  height: 94vh;
+  animation-name: fade-in;
+  animation-duration: 2s;
+  margin: 0px;
+  border-radius: 0px;
+}
