@@ -41,10 +41,35 @@ $(document).ready(function () {
 
 function loadDeveloperTable(data) {
     var table = document.getElementById("developerTable")
-    table.innerHTML = "";
+    table.innerHTML = "<tr><th>Id</th><th>Name</th><th>Email</th><th>Task</th></tr>";
     for (var i = 0; i < data.length; i++) {
-        table.innerHTML += "<tr><td>" + data[i].Id + "</td>" + "<td>" + data[i].Name + "</td>" + "<td>" + data[i].Email + "</td>" + "<td>" + data[i].Tasks + "</td></tr>"
+        table.innerHTML += "<tr>" +
+            "<td class='id'>" + data[i].Id + "</td>" +
+            "<td>" + data[i].Name + "</td>" +
+            "<td>" + data[i].Email + "</td>" +
+            "<td>" + data[i].Tasks + "</td>" +
+            "<td><button class='btn' style='font-size:10px;'>Delete</button></td>"
+        "</tr>"
     }
+
+    $('#developerTable tr button').click(function () {
+        var id = $(this).parent().parent().find('.id').text();
+        deleteDeveloper(id);
+    });
+}
+
+function deleteDeveloper(id) {
+    $.ajax({
+        url: 'http://dm.sof60.dk:84/api/Developer/' + id,
+        method: 'DELETE',
+        contentType: 'text/plain',
+        success: function (result) {
+            alert("So succesfull");
+        },
+        error: function (request, msg, error) {
+            alert("Shit. didnt work. Try again");
+        }
+    });
 }
 
 function getCookie(cname) {
