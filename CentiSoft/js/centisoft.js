@@ -28,16 +28,15 @@ $(document).ready(function () {
         var name = $("#cookie").val();
 
         var date = new Date();
-        date.setTime(date.getTime() + (1000 * 24 * 60 * 60 * 1000));
+        date.setTime(date.getDate() + 5);
         var expires = "expires=" + date.toUTCString();
-        document.cookie = "myCookie=" + name + ";" + expires + ";path=/";
+        document.cookie = "myCookie=" + name + ";" + expires + ";";
 
-        var kage = document.cookie;
         //var cookie = getCookie("myCookie");
         //$("#nameCookie").text(cookie);//getCookie("myCookie"));
-        alert(kage);
-
+        getCookie("nameCookie");
     })
+
 });
 
 function loadDeveloperTable(data) {
@@ -57,7 +56,10 @@ function getCookie(cname) {
             c = c.substring(1, c.length);
         }
         if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
+            var cval = c.substring(name.length, c.length);
+
+            document.getElementById("nameCookie").innerHTML = cval;
+
         }
     }
     return "";
