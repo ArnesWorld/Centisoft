@@ -47,8 +47,8 @@ function loginToWebservice(loginData) {
         contentType: 'application/json',
         data: JSON.stringify(loginData),
         success: function (data) {
-            $.cookie("token", data)
-            tempToken = data;
+            $.cookie("token", 'bearer ' + data)
+            alert($.cookie("token"));
         },
         error: function () {
             alert("Wrong username or password")
@@ -64,7 +64,7 @@ function loadDeveloperTable(data) {
             "<td class='id'>" + data[i].Id + "</td>" +
             "<td class='editableCell editName' contenteditable='false'>" + data[i].Name + "</td>" +
             "<td class='editableCell editEmail' contenteditable='false'>" + data[i].Email + "</td>" +
-            "<td class=tableTask>" + data[i].Tasks + "</td>" +
+            "<td class=tableTask>" + data[i].Tasks[0] + "</td>" +
             "<td><button class='btn delete' style='font-size:10px;'>Delete</button></td>" +
             "<td><button class='btn update' style='font-size:10px;'>Edit</button></td>"
         "</tr>"
@@ -88,7 +88,7 @@ function postDeveloper(newDeveloper) {
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(newDeveloper),
-        headers: { 'Authorization': tempToken },
+        headers: { 'Authorization': $.cookie("token") },
         success: function (data) {
             getDevelopers();
             //Reset textfields
@@ -108,7 +108,7 @@ function updateDeveloper(editedDeveloper, id) {
         type: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(editedDeveloper),
-        headers: { 'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJZT0xPIiwianRpIjoiNGRlZTQzNDEtN2EyOS00ZTI3LWE2ODgtODQzYzQ5ZDQwYmY1IiwibmJmIjoxNTE5NzE2Njk0LCJleHAiOjE1MjQ5MDA2OTQsImlzcyI6IlNXS0ciLCJhdWQiOiJERVZTIn0.UWwoESMLEOmTGzAes52akyGVzWspSFJb0h-9F2NoGHA' },
+        headers: { 'Authorization': $.cookie("token") },
         success: function (data) {
             getDevelopers();
         },
@@ -125,7 +125,7 @@ function deleteDeveloper(id) {
         url: 'http://centisoft.gotomain.net/api/v1/developer/' + id,
         method: 'DELETE',
         contenttype: "application/json; charset=utf-8",
-        headers: { 'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJZT0xPIiwianRpIjoiNGRlZTQzNDEtN2EyOS00ZTI3LWE2ODgtODQzYzQ5ZDQwYmY1IiwibmJmIjoxNTE5NzE2Njk0LCJleHAiOjE1MjQ5MDA2OTQsImlzcyI6IlNXS0ciLCJhdWQiOiJERVZTIn0.UWwoESMLEOmTGzAes52akyGVzWspSFJb0h-9F2NoGHA' },
+        headers: { 'Authorization': $.cookie("token") },
         success: function (result) {
             getDevelopers();
 
@@ -141,7 +141,7 @@ function getDevelopers() {
         type: 'GET',
         contentType: 'application/json; charset=utf-8',
         url: 'http://centisoft.gotomain.net/api/v1/developer',
-        headers: { 'Authorization': tempToken },
+        headers: { 'Authorization': $.cookie("token") },
         success: function (data) {
             loadDeveloperTable(data);
         }
