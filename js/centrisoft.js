@@ -1,5 +1,5 @@
 
-var tempToken;
+var tempToken = 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJTdGVmYW5PZ0FybmUiLCJqdGkiOiI3ZjBiYjRlNC1kOWFlLTRiY2EtYTQzZi03NTQyNmM2MWI3M2EiLCJuYmYiOjE1MTk3NDU3MjksImV4cCI6MTUyNDkyOTcyOSwiaXNzIjoiU1dLRyIsImF1ZCI6IkRFVlMifQ.kOQxyGBnUIywhIA-y5MvKQyGTMKarxuXvkJWvi1ONKI';
 
 $(document).ready(function () {
 
