@@ -1,43 +1,58 @@
-function clickMe() {
-    alert("Hello World!")
-}
-
-function postNewDeveloper() {
-    var myObj = { Id: 100, Name: "TestName", Email: "Test@mail.com", Tasks: null }
-    var params = JSON.stringify(myObj);
-
-    var postReq = new XMLHttpRequest();
-    postReq.open("POST", "http://dm.sof60.dk:84/api/Developer", true);
-    postReq.setRequestHeader('Content-type', 'application/json');
-    postReq.send(params);
-};
 
 $(document).ready(function () {
 
     $("#btnGetDevelopers").click(function () {
-        $.get("http://dm.sof60.dk:84/api/Developer", function (data) { loadDeveloperTable(data) });
-    });
+        getDevelopers();
+    })
 
     $("#btnSubmit").click(function () {
-        var email = $("#txtName").val();
-        var name = $("txtEmail").val();
-        $.post("http://dm.sof60.dk:84/api/Developer", { Name: name, Email: email });
+        let name = $("#txtName").val();
+        let email = $("#txtEmail").val();
+        let developer = { "Name": name, "Email": email, "Task": null }
+        postDeveloper(developer)
     });
 
     $("#btnCookie").click(function () {
         var name = $("#cookie").val();
-
         var date = new Date();
-        date.setTime(date.getDate() + 5);
+        date.setTime(date.getTime() + (1000 * 24 * 60 * 60 * 1000));
         var expires = "expires=" + date.toUTCString();
-        document.cookie = "myCookie=" + name + ";" + expires + ";";
-
-        //var cookie = getCookie("myCookie");
-        //$("#nameCookie").text(cookie);//getCookie("myCookie"));
-        getCookie("nameCookie");
+        document.cookie = "myCookie" + "=" + name + ";" + expires + ";path=C:file:///C:/Users/Arne/Documents/UCN/4.semester/WebDev/CentriSoft/index.html";
+        var cookie = getCookie("myCookie");
+        $("#nameCookie").text(cookie);//getCookie("myCookie"));
+        alert(cookie);
     })
 
-});
+    $("#btnLogin").click(function () {
+        $.cookie("loginName", $("#loginName").val(), { expires: 7 });
+        $.cookie("loginPassword", $("#loginPassword").val(), { expires: 7 });
+        let loginData = { "username": $("#loginName").val(), "password": $("#loginPassword").val() }
+        loginToWebservice(loginData)
+    })
+
+    $("#loginLink").click(function () {
+        $("#loginDialog").modal('show');
+        $("#loginName").val($.cookie("loginName"));
+        $("#loginEmail").val($.cookie("loginPassword"));
+    })
+})
+
+
+function loginToWebservice(loginData) {
+    $.ajax({
+        url: 'http://centisoft.gotomain.net/api/v1/Client/login',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(loginData),
+        success: function (data) {
+            $.cookie("token", data)
+            alert($.cookie("token"));
+        },
+        error: function () {
+            alert("Wrong username or password")
+        }
+    });
+}
 
 function loadDeveloperTable(data) {
     var table = document.getElementById("developerTable")
@@ -45,31 +60,97 @@ function loadDeveloperTable(data) {
     for (var i = 0; i < data.length; i++) {
         table.innerHTML += "<tr>" +
             "<td class='id'>" + data[i].Id + "</td>" +
-            "<td>" + data[i].Name + "</td>" +
-            "<td>" + data[i].Email + "</td>" +
-            "<td>" + data[i].Tasks + "</td>" +
-            "<td><button class='btn' style='font-size:10px;'>Delete</button></td>"
+            "<td class='editableCell editName' contenteditable='false'>" + data[i].Name + "</td>" +
+            "<td class='editableCell editEmail' contenteditable='false'>" + data[i].Email + "</td>" +
+            "<td class=tableTask>" + data[i].Tasks + "</td>" +
+            "<td><button class='btn delete' style='font-size:10px;'>Delete</button></td>" +
+            "<td><button class='btn update' style='font-size:10px;'>Edit</button></td>"
         "</tr>"
     }
 
-    $('#developerTable tr button').click(function () {
+    $('#developerTable tr').find('.delete').click(function () {
         var id = $(this).parent().parent().find('.id').text();
         deleteDeveloper(id);
     });
+
+    $('#developerTable tr').find('.update').click(function () {
+        upDateButtonHandler($(this));
+    });
+
 }
+
+function postDeveloper(newDeveloper) {
+    $.ajax({
+        url: 'http://centisoft.gotomain.net/api/v1/developer',
+        dataType: 'json',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(newDeveloper),
+        headers: { 'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJZT0xPIiwianRpIjoiNGRlZTQzNDEtN2EyOS00ZTI3LWE2ODgtODQzYzQ5ZDQwYmY1IiwibmJmIjoxNTE5NzE2Njk0LCJleHAiOjE1MjQ5MDA2OTQsImlzcyI6IlNXS0ciLCJhdWQiOiJERVZTIn0.UWwoESMLEOmTGzAes52akyGVzWspSFJb0h-9F2NoGHA' },
+        success: function (data) {
+            getDevelopers();
+            //Reset textfields
+            $("#txtName").val("");
+            $("#txtEmail").val("");
+        },
+        error: function () {
+            alert("Something went wrong")
+        }
+    });
+}
+
+function updateDeveloper(editedDeveloper, id) {
+    $.ajax({
+        url: 'http://centisoft.gotomain.net/api/v1/developer/' + id,
+        dataType: 'json',
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(editedDeveloper),
+        headers: { 'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJZT0xPIiwianRpIjoiNGRlZTQzNDEtN2EyOS00ZTI3LWE2ODgtODQzYzQ5ZDQwYmY1IiwibmJmIjoxNTE5NzE2Njk0LCJleHAiOjE1MjQ5MDA2OTQsImlzcyI6IlNXS0ciLCJhdWQiOiJERVZTIn0.UWwoESMLEOmTGzAes52akyGVzWspSFJb0h-9F2NoGHA' },
+        success: function (data) {
+            getDevelopers();
+        },
+        error: function (jqXhr, textStatus, errorThrown) {
+            alert("Something went wrong")
+        }
+    });
+
+}
+
 
 function deleteDeveloper(id) {
     $.ajax({
-        url: 'http://dm.sof60.dk:84/api/Developer/' + id,
+        url: 'http://centisoft.gotomain.net/api/v1/developer/' + id,
         method: 'DELETE',
-        contentType: 'text/plain',
+        contenttype: "application/json; charset=utf-8",
+        headers: { 'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJZT0xPIiwianRpIjoiNGRlZTQzNDEtN2EyOS00ZTI3LWE2ODgtODQzYzQ5ZDQwYmY1IiwibmJmIjoxNTE5NzE2Njk0LCJleHAiOjE1MjQ5MDA2OTQsImlzcyI6IlNXS0ciLCJhdWQiOiJERVZTIn0.UWwoESMLEOmTGzAes52akyGVzWspSFJb0h-9F2NoGHA' },
         success: function (result) {
-            alert("So succesfull");
+            getDevelopers();
+
         },
         error: function (request, msg, error) {
             alert("Shit. didnt work. Try again");
         }
     });
+}
+
+function getDevelopers() {
+    $.ajax({
+        type: 'GET',
+        contentType: 'application/json; charset=utf-8',
+        url: 'http://centisoft.gotomain.net/api/v1/developer',
+        headers: { 'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJZT0xPIiwianRpIjoiNGRlZTQzNDEtN2EyOS00ZTI3LWE2ODgtODQzYzQ5ZDQwYmY1IiwibmJmIjoxNTE5NzE2Njk0LCJleHAiOjE1MjQ5MDA2OTQsImlzcyI6IlNXS0ciLCJhdWQiOiJERVZTIn0.UWwoESMLEOmTGzAes52akyGVzWspSFJb0h-9F2NoGHA' },
+        success: function (data) {
+            loadDeveloperTable(data);
+        }
+    });
+}
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
 function getCookie(cname) {
@@ -81,10 +162,7 @@ function getCookie(cname) {
             c = c.substring(1, c.length);
         }
         if (c.indexOf(name) == 0) {
-            var cval = c.substring(name.length, c.length);
-
-            document.getElementById("nameCookie").innerHTML = cval;
-
+            return c.substring(name.length, c.length);
         }
     }
     return "";
@@ -102,21 +180,32 @@ function checkCookie() {
     }
 }
 
-/* JavaScriptVersion
-function loadDeveloperTable(data) {
+function upDateButtonHandler(updateButton) {
+    //Clears previous selections
+    $("#developerTable td").attr('contenteditable', 'false');
+    $("#developerTable td").css("border", "none")
 
-    var table = document.getElementById("developerTable")
-    table.innerHTML = "";
-    var developerList = data;//JSON.parse(this.responseText);
-    for (var i = 0; i < developerList.length; i++) {
-        table.innerHTML += "<tr><td>" + developerList[i].Id + "</td>" + "<td>" + developerList[i].Name + "</td>" + "<td>" + developerList[i].Email + "</td>" + "<td>" + developerList[i].Tasks + "</td></tr>"
+    if ($(updateButton).text() == "Edit") {
+        //Reset all other buttons..There can be only one!
+        $("#developerTable button").text("Edit");
+        $("#developerTable button").css("color", "black");
+        //Set all '.editCell -elements' contenteditable-attributes to true. And give a green border.... And sets focus
+        $(updateButton).parent().parent().find('.editableCell').attr('contenteditable', 'true');
+        $(updateButton).parent().parent().find('.editableCell').css("border", "solid rgba(0, 255, 0, 0.3) 4px")
+        $(updateButton).parent().parent().find('.editName').trigger('focus');
+        //Change button to save-mode
+        $(updateButton).text("Save");
+        $(updateButton).css("color", "green");
+    }
+    else if ($(updateButton).text() == "Save") {
+        let id = $(updateButton).parent().parent().find('.id').text();
+        let name = $(updateButton).parent().parent().find('.editName').text();
+        let email = $(updateButton).parent().parent().find('.editEmail').text();
+        let editedDeveloper = { "Name": name, "Email": email, "Task": null };
+        updateDeveloper(editedDeveloper, id);
     }
 }
-*/
 
-function getDevelopers() {
-    var onReq = new XMLHttpRequest();
-    onReq.addEventListener("load", loadDeveloperTable);
-    onReq.open("GET", "http://dm.sof60.dk:84/api/Developer");
-    onReq.send();
-}
+
+
+
