@@ -9,8 +9,9 @@
 
     <link rel="stylesheet" href="CSS/style.css" type="text/css" />
     <link rel="stylesheet" href="CSS/lessStyle.css" type="text/css" />
+    <link rel="stylesheet" href="CSS/loginDialogCss.css" type="text/css" />
 
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">-->
 
     <!-- Latest compiled and minified JavaScript -->
 
@@ -31,7 +32,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="customer.html">Customers</a>
+                    <a class="nav-link disabled" href="customer.html" acti>Customers</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Projects</a>
@@ -47,10 +48,12 @@
                     </div>
                 </li>
             </ul>
-            <span id="nameCookie" class="float-right" style="margin:0 auto;"></span>
+            <a id="loginLink" href="#">Login</a>
+            <!-- data-toggle="modal" data-target="#login-modal"-->
         </div>
     </nav>
     <header id="header" class="jumbotron">
+
         <div class="container w3-animate-top">
             <h1 class="display-4 ">Centisoft Time Tracking</h1>
             <p class="lead">The best choice for Time Registration</p>
@@ -84,16 +87,46 @@
             </div>
         </div>
     </section>
+    <!-- LOGIN DIALOG -->
+    <div id="loginDialog" class="modal fade" id="login-modal" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content loginmodal-container">
+                <div class="modal-header">
+                    <h3>Login</h3>
+                </div>
+
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <input id="loginName" type="text" name="user" placeholder="Username">
+                            <input id="loginPassword" type="password" name="pass" placeholder="Password">
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="btnLogin" class="btn btn-primary btn-block">Log In</button>
+                </div>
+
+                <div class="login-help">
+                    <a href="#">Register</a> -
+                    <a href="#">Forgot Password</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!---FOOTER-->
     <footer>
         This is the Index page.
     </footer>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
-    <script src="js/centisoft.js"></script>
+    <script src="js/centrisoft.js"></script>
+    <script src="js/cookie/jquery.cookie.js"></script>
 </body>
 
 </HTML>
