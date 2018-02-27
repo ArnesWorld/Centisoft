@@ -1,4 +1,6 @@
 
+var tempToken;
+
 $(document).ready(function () {
 
     $("#btnGetDevelopers").click(function () {
@@ -46,7 +48,7 @@ function loginToWebservice(loginData) {
         data: JSON.stringify(loginData),
         success: function (data) {
             $.cookie("token", data)
-            alert($.cookie("token"));
+            tempToken = data;
         },
         error: function () {
             alert("Wrong username or password")
@@ -86,7 +88,7 @@ function postDeveloper(newDeveloper) {
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(newDeveloper),
-        headers: { 'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJZT0xPIiwianRpIjoiNGRlZTQzNDEtN2EyOS00ZTI3LWE2ODgtODQzYzQ5ZDQwYmY1IiwibmJmIjoxNTE5NzE2Njk0LCJleHAiOjE1MjQ5MDA2OTQsImlzcyI6IlNXS0ciLCJhdWQiOiJERVZTIn0.UWwoESMLEOmTGzAes52akyGVzWspSFJb0h-9F2NoGHA' },
+        headers: { 'Authorization': tempToken },
         success: function (data) {
             getDevelopers();
             //Reset textfields
@@ -139,7 +141,7 @@ function getDevelopers() {
         type: 'GET',
         contentType: 'application/json; charset=utf-8',
         url: 'http://centisoft.gotomain.net/api/v1/developer',
-        headers: { 'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJZT0xPIiwianRpIjoiNGRlZTQzNDEtN2EyOS00ZTI3LWE2ODgtODQzYzQ5ZDQwYmY1IiwibmJmIjoxNTE5NzE2Njk0LCJleHAiOjE1MjQ5MDA2OTQsImlzcyI6IlNXS0ciLCJhdWQiOiJERVZTIn0.UWwoESMLEOmTGzAes52akyGVzWspSFJb0h-9F2NoGHA' },
+        headers: { 'Authorization': tempToken },
         success: function (data) {
             loadDeveloperTable(data);
         }
