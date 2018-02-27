@@ -7,10 +7,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
 
-    <link rel="stylesheet" href="CSS/styleDeveloperPage.css" type="text/css" />
     <link rel="stylesheet" href="CSS/style.css" type="text/css" />
+    <link rel="stylesheet" href="CSS/lessStyle.css" type="text/css" />
+    <link rel="stylesheet" href="CSS/loginDialogCss.css" type="text/css" />
 
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">-->
 
     <!-- Latest compiled and minified JavaScript -->
 
@@ -31,7 +32,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="customer.html">Customers</a>
+                    <a class="nav-link disabled" href="customer.html" acti>Customers</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Projects</a>
@@ -41,54 +42,80 @@
                         Developer
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Create Developer</a>
+                        <a class="dropdown-item" href="developer.html">Create Developer</a>
                         <a class="dropdown-item" href="#">Show Developers</a>
                         <a class="dropdown-item" href="#">Something else here</a>
                     </div>
                 </li>
             </ul>
+            <a id="loginLink" href="#">Login</a>
+            <!-- data-toggle="modal" data-target="#login-modal"-->
         </div>
     </nav>
-    <section id="CreateDeveloper" class="jumbotron">
-        <div class="container-fluid w3-animate-top">
-            <h1 id="title">Create New Developer</h1>
-            <div class="row">
-                <div class="col-md-4 col-sm-12" id="createDeveloperPanel">
-                    <h4 class="panel-header">Enter name and email</h4>
-                    <input type="text" id="txtName" placeholder="Enter name" />
-                    <br/>
-                    <input type="text" id="txtEmail" placeholder="Enter email" />
-                    <br/>
-                    <input type="text" id="txtTask" placeholder="Enter Task" />
-                    <br/>
-                    <button id="btnSubmit" class="btn" type="button">Submit</button>
-                </div>
-                <div class="col-md-4 col-sm-12 offset-md-1" id="picturePanel">
-                </div>
+    <header id="header" class="jumbotron">
+
+        <div class="container w3-animate-top">
+            <h1 class="display-4 ">Centisoft Time Tracking</h1>
+            <p class="lead">The best choice for Time Registration</p>
+            <input type='text' id="cookie" />
+            <button id="btnCookie">Click Me!</button>
+        </div>
+    </header>
+
+    <section>
+        <div class="row">
+            <div class="col-md-4 col-sm-12" id="panel1">
+                <h4 class="panel-header">About us</h4>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem sapiente suscipit, praesentium officia animi nostrum? Inventore
+                    ab explicabo ut enim, aliquid minus eius incidunt. Perferendis, incidunt? Architecto qui ipsam exercitationem?
+                </p>
+            </div>
+            <div class="col-md-4 col-sm-12" id="panel2">
+                <h4 class="panel-header">About us</h4>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem sapiente suscipit, praesentium officia animi nostrum? Inventore
+                    ab explicabo ut enim, aliquid minus eius incidunt. Perferendis, incidunt? Architecto qui ipsam exercitationem?
+                </p>
+            </div>
+            <div class="col-md-4 col-sm-12" id="panel3">
+                <h4 class="panel-header">About us</h4>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem sapiente suscipit, praesentium officia animi nostrum? Inventore
+                    ab explicabo ut enim, aliquid minus eius incidunt. Perferendis, incidunt? Architecto qui ipsam exercitationem?
+                </p>
             </div>
         </div>
     </section>
+    <!-- LOGIN DIALOG -->
+    <div id="loginDialog" class="modal fade" id="login-modal" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content loginmodal-container">
+                <div class="modal-header">
+                    <h3>Login</h3>
+                </div>
 
-    <section id="ShowDevelopers" class="jumbotron">
-        <div class="container-fluid w3-animate-top">
-            <h1 id="title">Show Developers</h1>
-            <div class="row">
-                <div class="col-md-4 col-sm-12" id="createDeveloperPanel">
-                    <h4 class="panel-header">Developers</h4>
-                    <table class="table" id="developerTable">
-                        <tr>
-                            <th>Id</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Task</th>
-                        </tr>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <input id="loginName" type="text" name="user" placeholder="Username">
+                            <input id="loginPassword" type="password" name="pass" placeholder="Password">
+                        </div>
+                    </form>
+                </div>
 
-                    </table>
+                <div class="modal-footer">
+                    <button id="btnLogin" class="btn btn-primary btn-block">Log In</button>
+                </div>
+
+                <div class="login-help">
+                    <a href="#">Register</a> -
+                    <a href="#">Forgot Password</a>
                 </div>
             </div>
-            <button id="btnGetDevelopers" class="btn" type="button">Get Developers</button>
         </div>
-    </section>
+    </div>
+    <!---FOOTER-->
     <footer>
         This is the Index page.
     </footer>
@@ -99,6 +126,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
     <script src="js/centrisoft.js"></script>
+    <script src="js/cookie/jquery.cookie.js"></script>
 </body>
 
 </HTML>
