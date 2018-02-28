@@ -57,21 +57,17 @@ function loginToWebservice(loginData) {
 }
 //Inspired by http://www.encodedna.com/javascript/populate-json-data-to-html-table-using-javascript.htm
 function loadDeveloperTable(data) {
-    var developerList = JSON.parse(this.responseText);
-
     //Extract values for HTML header
     var col = [];
-    for (let i = 0; i < developerList.length; i++) {
-        for (var key in developerList[i]) {
+    for (let i = 0; i < data.length; i++) {
+        for (var key in data[i]) {
             if (col.indexOf(key) === -1) {
                 col.push(key);
             }
         }
     }
-
     //Create dynamic table
     var table = document.createElement("table")
-
     //Create HTML table header row using the extracted headers above
     var tr = table.insertRow(-1); //Table row 
     for (let i = 0; i < col.length; i++) {
@@ -81,12 +77,12 @@ function loadDeveloperTable(data) {
     }
 
     //Add JSON data to the table as rows
-    for (let i = 0; i < developerList.length; i++) {
+    for (let i = 0; i < data.length; i++) {
         tr = table.insertRow(-1);
 
         for (let j = 0; j < col.length; j++) {
             var tabCell = tr.insertCell(-1);
-            tabCell.innerHTML = developerList[i][col[j]];
+            tabCell.innerHTML = data[i][col[j]];
         }
     }
 
