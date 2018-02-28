@@ -1,7 +1,23 @@
 
 var tempToken = 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJTdGVmYW5PZ0FybmUiLCJqdGkiOiI3ZjBiYjRlNC1kOWFlLTRiY2EtYTQzZi03NTQyNmM2MWI3M2EiLCJuYmYiOjE1MTk3NDU3MjksImV4cCI6MTUyNDkyOTcyOSwiaXNzIjoiU1dLRyIsImF1ZCI6IkRFVlMifQ.kOQxyGBnUIywhIA-y5MvKQyGTMKarxuXvkJWvi1ONKI';
-
+var storage = window.localStorage;
 $(document).ready(function () {
+
+    //Check if user is logged-in
+    if ($.cookie('token') === null || $.cookie('token') === "") {
+        alert("Please log in!");
+        window.location.href = 'index.html'
+    }
+    //Check if there is pending posts thats nees sending
+    if (!(storage.getItem("pendingPosts") === null)) {
+
+        let pendingPosts = JSON.parse(storage.getItem("pendingPosts"));
+        for (var i = 0; i < pendingPosts.length; i++) {
+            postDeveloper(pendingPosts[i]);
+        }
+        storage.removeItem("pendingPosts");
+    }
+
 
     $("#btnGetDevelopers").click(function () {
         getDevelopers();
@@ -14,28 +30,28 @@ $(document).ready(function () {
         postDeveloper(developer)
     });
 
-    $("#btnCookie").click(function () {
-        var name = $("#cookie").val();
-        var date = new Date();
-        date.setTime(date.getTime() + (1000 * 24 * 60 * 60 * 1000));
-        var expires = "expires=" + date.toUTCString();
-        document.cookie = "myCookie" + "=" + name + ";" + expires + ";path=C:file:///C:/Users/Arne/Documents/UCN/4.semester/WebDev/CentriSoft/index.html";
-        var cookie = getCookie("myCookie");
-        $("#nameCookie").text(cookie);//getCookie("myCookie"));
-        alert(cookie);
-    })
-
     $("#btnLogin").click(function () {
+        //Set cookies for easier access next time
         $.cookie("loginName", $("#loginName").val(), { expires: 7 });
         $.cookie("loginPassword", $("#loginPassword").val(), { expires: 7 });
         let loginData = { "username": $("#loginName").val(), "password": $("#loginPassword").val() }
         loginToWebservice(loginData)
     })
 
-    $("#loginLink").click(function () {
+    $("#logInLink").click(function () {
         $("#loginDialog").modal('show');
+        //Sets the cookie-values in the inputfields- OBS if they are set.
         $("#loginName").val($.cookie("loginName"));
         $("#loginEmail").val($.cookie("loginPassword"));
+    })
+
+    $("#logOutLink").click(function () {
+        $.removeCookie('token');
+        window.location.href = 'index.html'
+    })
+
+    $("#developerButton").click(function () {
+        window.location.href = 'developer.html'
     })
 })
 
@@ -47,8 +63,8 @@ function loginToWebservice(loginData) {
         contentType: 'application/json',
         data: JSON.stringify(loginData),
         success: function (data) {
-            $.cookie("token", 'bearer ' + data)
-            alert($.cookie("token"));
+            $.cookie("token", 'bearer ' + data);
+            window.location.href = 'controlPanel.html';
         },
         error: function () {
             alert("Wrong username or password")
@@ -96,7 +112,19 @@ function postDeveloper(newDeveloper) {
             $("#txtEmail").val("");
         },
         error: function () {
-            alert("Something went wrong")
+            alert("Couldn't post new developer at the moment. Will try again after next refresh")
+            var localstorage = window.localStorage;
+            if (localstorage.getItem("pendingPosts") === null) {
+                let posts = [];
+                posts.push(newDeveloper);
+                localstorage.setItem("pendingPosts", JSON.stringify(posts));
+            }
+            else {
+                let storedPosts = JSON.parse(localstorage.getItem("pendingPosts"));
+                storedPosts.push(newDeveloper);
+                localstorage.setItem("pendingPosts", JSON.stringify(storedPosts));
+            }
+
         }
     });
 }
@@ -141,46 +169,13 @@ function getDevelopers() {
         type: 'GET',
         contentType: 'application/json; charset=utf-8',
         url: 'http://centisoft.gotomain.net/api/v1/developer',
-        headers: { 'Authorization': tempToken },
+        headers: { 'Authorization': $.cookie("token") },
         success: function (data) {
             loadDeveloperTable(data);
         }
     });
 }
 
-function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    var expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1, c.length);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
-
-function checkCookie() {
-    var user = getCookie("username");
-    if (user != "") {
-        alert("Welcome again " + user);
-    } else {
-        user = prompt("Please enter your name:", "");
-        if (user != "" && user != null) {
-            setCookie("username", user, 365);
-        }
-    }
-}
 
 function upDateButtonHandler(updateButton) {
     //Clears previous selections

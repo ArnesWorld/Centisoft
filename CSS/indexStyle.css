@@ -1,10 +1,28 @@
-#logo-text {
-  color: #1caa98;
+
+@keyframes fade-in {
+  0%   {opacity: 0.0;}
+  100% {opacity: 1.0;}
 }
+
+@media only screen and (max-width: 768px) {
+
+  header {
+      background-size: 200% 100%;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+
+  header {
+      background-size: 100% 100%;
+  }       
+}
+
+
 #panel1 {
   padding: 2em;
   line-height: 30px;
-  padding-left: 20px;
+
   background-color: #4e7873;
 }
 #panel1 h4 {
@@ -13,7 +31,7 @@
 #panel2 {
   padding: 2em;
   line-height: 30px;
-  padding-left: 20px;
+
   background-color: #43b3b3;
 }
 #panel2 h4 {
