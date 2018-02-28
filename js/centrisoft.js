@@ -176,7 +176,7 @@ function getDevelopers() {
         type: 'GET',
         contentType: 'application/json; charset=utf-8',
         url: 'http://centisoft.gotomain.net/api/v1/developer',
-        headers: { 'Authorization': $.cookie("token") },
+        headers: { 'Authorization': tempToken },
         success: function (data) {
             loadDeveloperTable(data);
         }
