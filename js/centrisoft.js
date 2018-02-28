@@ -55,64 +55,29 @@ function loginToWebservice(loginData) {
         }
     });
 }
-//Inspired by http://www.encodedna.com/javascript/populate-json-data-to-html-table-using-javascript.htm
+
 function loadDeveloperTable(data) {
-    //Extract values for HTML header
-    var col = [];
-    for (let i = 0; i < data.length; i++) {
-        for (var key in data[i]) {
-            if (col.indexOf(key) === -1) {
-                col.push(key);
-            }
-        }
-    }
-    //Create dynamic table
-    var table = document.createElement("table")
-    //Create HTML table header row using the extracted headers above
-    var tr = table.insertRow(-1); //Table row 
-    for (let i = 0; i < col.length; i++) {
-        var th = document.createElement("th"); //Table header
-        th.innerHTML = col[i];
-        tr.appendChild(th);
+    var table = document.getElementById("developerTable")
+    table.innerHTML = "<tr><th>Id</th><th>Name</th><th>Email</th><th>Task</th></tr>";
+    for (var i = 0; i < data.length; i++) {
+        table.innerHTML += "<tr>" +
+            "<td class='id'>" + data[i].Id + "</td>" +
+            "<td class='editableCell editName' contenteditable='false'>" + data[i].Name + "</td>" +
+            "<td class='editableCell editEmail' contenteditable='false'>" + data[i].Email + "</td>" +
+            "<td class=tableTask>" + data[i].Tasks[0] + "</td>" +
+            "<td><button class='btn delete' style='font-size:10px;'>Delete</button></td>" +
+            "<td><button class='btn update' style='font-size:10px;'>Edit</button></td>"
+        "</tr>"
     }
 
-    //Add JSON data to the table as rows
-    for (let i = 0; i < data.length; i++) {
-        tr = table.insertRow(-1);
+    $('#developerTable tr').find('.delete').click(function () {
+        var id = $(this).parent().parent().find('.id').text();
+        deleteDeveloper(id);
+    });
 
-        for (let j = 0; j < col.length; j++) {
-            var tabCell = tr.insertCell(-1);
-            tabCell.innerHTML = data[i][col[j]];
-        }
-    }
-
-    //Add the newly created table with JSON data to a container
-    table.setAttribute('class', 'table table-striped');
-    var divContainer = document.getElementById("tableDiv");
-    divContainer.innerHTML = "";
-    divContainer.appendChild(table);
-
-    // var table = document.getElementById("developerTable")
-    // table.innerHTML = "<tr><th>Id</th><th>Name</th><th>Email</th><th>Task</th></tr>";
-    // for (var i = 0; i < data.length; i++) {
-    //     table.innerHTML += "<tr>" +
-    //         "<td class='id'>" + data[i].Id + "</td>" +
-    //         "<td class='editableCell editName' contenteditable='false'>" + data[i].Name + "</td>" +
-    //         "<td class='editableCell editEmail' contenteditable='false'>" + data[i].Email + "</td>" +
-    //         "<td class=tableTask>" + data[i].Tasks[0] + "</td>" +
-    //         "<td><button class='btn delete' style='font-size:10px;'>Delete</button></td>" +
-    //         "<td><button class='btn update' style='font-size:10px;'>Edit</button></td>"
-    //     "</tr>"
-    // }}
-
-    // $('#developerTable tr').find('.delete').click(function () {
-    //     var id = $(this).parent().parent().find('.id').text();
-    //     deleteDeveloper(id);
-    // });
-
-    // $('#developerTable tr').find('.update').click(function () {
-    //     upDateButtonHandler($(this));
-    // });
+    $('#developerTable tr').find('.update').click(function () {
+        upDateButtonHandler($(this));
+    });
 
 }
 
